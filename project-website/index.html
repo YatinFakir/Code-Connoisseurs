@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Connoisseurs - Automated Employee Shift Scheduling & Attendance Tracker</title>
+    
+    
+    <meta property="og:type" content="website">
+  <meta property="og:title" content="Capstone Showcase">
+  <meta property="og:description"
+        content="Explore my capstone project and its features.">
+  <meta property="og:url"
+        content="https://capstone-showcase.thirteen32official.workers.dev/">
+  <meta property="og:image"
+        content="https://i.ibb.co/nMH2jf8F/image-2.png">
+
+
+    <!-- ADD THIS LINE FOR FONT AWESOME ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #ff6584;
+            --dark-color: #1a1a2e;
+            --darker-color: #0f0f1a;
+            --light-color: #f5f5f7;
+            --gray-color: #8e8e93;
+            --blur-intensity: 15px;
+            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--light-color);
+            background-color: var(--darker-color);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(108, 99, 255, 0.5);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.2s ease;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(108, 99, 255, 0.3);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.4s ease;
+        }
+
+        /* Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.2) 0%, rgba(108, 99, 255, 0) 70%);
+            pointer-events: none;
+            z-index: 9997;
+            mix-blend-mode: overlay;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Section Backgrounds - FIXED */
+        .section-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        .section-bg.active {
+            opacity: 1;
+            z-index: -1;
+        }
+
+        /* Home Background - Floating Particles */
+        #home-bg {
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 8s infinite linear;
+        }
+
+        /* Project Background - Glass Morphism */
+        #project-bg {
+            background: linear-gradient(135deg, var(--dark-color) 0%, var(--darker-color) 100%);
+            overflow: hidden;
+        }
+
+        .glass-element {
+            position: absolute;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: glassFloat 15s infinite ease-in-out;
+        }
+
+        /* Team Background - Animated Plexus Network */
+        #team-bg {
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+        }
+
+        .plexus-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.3;
+        }
+
+        .plexus-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, transparent 100%);
+            transform-origin: 0 0;
+            opacity: 0.1;
+        }
+
+        /* Tech Background - Binary Rain */
+        #tech-bg {
+            background: linear-gradient(135deg, var(--dark-color) 0%, var(--darker-color) 100%);
+            overflow: hidden;
+        }
+
+        .binary-digit {
+            position: absolute;
+            color: rgba(108, 99, 255, 0.3);
+            font-family: monospace;
+            font-size: 18px;
+            animation: binaryFall 10s linear infinite;
+        }
+
+        /* Sponsor Background - Geometric Waves */
+        #sponsor-bg {
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100px;
+            background: linear-gradient(90deg, transparent, rgba(108, 99, 255, 0.05), transparent);
+            animation: waveMove 20s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(100px, 100px) rotate(360deg);
+            }
+        }
+
+        @keyframes glassFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(20px, 10px) rotate(5deg);
+            }
+
+            50% {
+                transform: translate(-15px, 15px) rotate(-5deg);
+            }
+
+            75% {
+                transform: translate(10px, -10px) rotate(3deg);
+            }
+        }
+
+        @keyframes binaryFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes waveMove {
+            0% {
+                transform: translateX(-100%) scaleX(1.5);
+            }
+
+            50% {
+                transform: translateX(0%) scaleX(1);
+            }
+
+            100% {
+                transform: translateX(100%) scaleX(1.5);
+            }
+        }
+
+        /* Team Member Contact Icons */
+        .member-contact {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(108, 99, 255, 0.1);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .contact-icon:hover {
+            background: rgba(108, 99, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .contact-icon.email {
+            background: rgba(255, 101, 132, 0.1);
+            border: 1px solid rgba(255, 101, 132, 0.3);
+            color: var(--secondary-color);
+        }
+
+        .contact-icon.email:hover {
+            background: rgba(255, 101, 132, 0.3);
+            box-shadow: 0 0 15px rgba(255, 101, 132, 0.4);
+        }
+        
+        /* Scroll Animation Classes */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 46, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            z-index: 10000;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            font-size: 14px;
+            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-content {
+            text-align: center;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .team-logo {
+            max-width: 150px;
+            height: auto;
+            filter: drop-shadow(0 5px 15px rgba(108, 99, 255, 0.3));
+            animation: pulse 2s infinite;
+        }
+
+        .team-name {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 4px;
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 60%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: var(--transition);
+            backdrop-filter: blur(var(--blur-intensity));
+            background: rgba(26, 26, 46, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            padding: 15px 0;
+            background: rgba(15, 15, 26, 0.5);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            transition: var(--transition);
+        }
+
+        .nav-logo:hover img {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--light-color);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .scroll-to-top i {
+            color: white;
+            font-size: 20px;
+        }
+
+        /* Sections - FIXED BACKGROUNDS */
+        .section {
+            min-height: 100vh;
+            padding: 100px 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: transparent !important;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .section-title:hover {
+            transform: translateY(-5px);
+            text-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 2px;
+        }
+
+        /* Home Section */
+        .home-section {
+            position: relative;
+        }
+
+        .home-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .home-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            transition: var(--transition);
+        }
+
+        .home-title:hover {
+            transform: scale(1.02);
+        }
+
+        .home-description {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+        }
+
+        .home-description:hover {
+            transform: translateX(10px);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: none;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-color);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .scroll-arrow::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 2px;
+            animation: scroll 2s infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(20px);
+                opacity: 0;
+            }
+        }
+
+        /* Project Section */
+        .project-section {
+            /* Background removed - handled by section-bg */
+        }
+
+        .project-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .project-image {
+            flex: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .project-image:hover {
+            transform: translateY(-10px) rotateY(10deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .project-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .project-details {
+            flex: 1;
+        }
+
+        .project-details h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .project-details h3:hover {
+            transform: translateX(10px);
+            color: var(--primary-color);
+        }
+
+        .project-details p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+        }
+
+        .project-details p:hover {
+            transform: translateX(5px);
+        }
+
+        .project-features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-intensity));
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover h4 {
+            transform: translateX(5px);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover p {
+            transform: translateX(5px);
+        }
+
+        /* Team Section */
+        .team-section {
+            /* Background removed - handled by section-bg */
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-intensity));
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .member-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .member-card:hover .member-image {
+            border-color: var(--primary-color);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .member-card:hover .member-image img {
+            transform: scale(1.1);
+        }
+
+        .member-name {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .member-card:hover .member-name {
+            transform: translateY(-5px);
+            color: var(--primary-color);
+        }
+
+        .member-role {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .member-card:hover .member-role {
+            transform: translateY(-5px);
+        }
+
+        .member-bio {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+
+        .member-card:hover .member-bio {
+            transform: translateY(-5px);
+        }
+
+        /* Tech Stack Section */
+        .tech-section {
+            /* Background removed - handled by section-bg */
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-intensity));
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-10px) scale(1.05) rotateY(10deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .tech-item:hover::before {
+            opacity: 0.1;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .tech-icon img {
+            width: 100%;
+            height: auto;
+            filter: brightness(0) invert(1);
+            transition: var(--transition);
+        }
+
+        .tech-item:hover .tech-icon img {
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(108, 99, 255, 0.5));
+            transform: scale(1.2) rotateY(180deg);
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .tech-item:hover .tech-name {
+            transform: translateY(-5px);
+            color: var(--primary-color);
+        }
+
+        /* Sponsor Section */
+        .sponsor-section {
+            /* Background removed - handled by section-bg */
+        }
+
+        .sponsor-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .sponsor-logo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .sponsor-logo:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .sponsor-logo img {
+            max-width: 300px;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+            transition: var(--transition);
+        }
+
+        .sponsor-logo:hover img {
+            filter: drop-shadow(0 15px 30px rgba(108, 99, 255, 0.5));
+        }
+
+        .sponsor-details {
+            flex: 1;
+        }
+
+        .sponsor-details h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .sponsor-details h3:hover {
+            transform: translateX(10px);
+            color: var(--primary-color);
+        }
+
+        .sponsor-details p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+        }
+
+        .sponsor-details p:hover {
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-color);
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .footer-logo:hover img {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+
+        .footer-text:hover {
+            transform: translateY(-5px);
+            color: var(--primary-color);
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: none;
+            transition: var(--transition);
+        }
+
+        .footer-copyright:hover {
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .home-title {
+                font-size: 3rem;
+            }
+
+            .project-content,
+            .sponsor-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                right: -100%;
+                flex-direction: column;
+                background: rgba(15, 15, 26, 0.95);
+                backdrop-filter: blur(var(--blur-intensity));
+                width: 100%;
+                text-align: center;
+                transition: var(--transition);
+                padding: 20px 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-item {
+                margin: 15px 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .home-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .team-members {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .home-title {
+                font-size: 2rem;
+            }
+
+            .home-description {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Project Video Styling with Fixed Height */
+        .project-video {
+            width: 100%;
+            height: 300px;
+            /* Adjust this value as needed */
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .project-image:hover .project-video {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Project Media Layout */
+.project-media {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.project-video-container,
+.project-screenshot-container {
+    width: 100%;
+}
+
+/* Mobile Screenshot Styling */
+.mobile-screenshot {
+    text-align: center;
+    position: relative;
+}
+
+.mobile-screenshot-img {
+    width: 60%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.mobile-screenshot:hover .mobile-screenshot-img {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    border-color: rgba(108, 99, 255, 0.3);
+}
+
+.screenshot-caption {
+    margin-top: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Project Image adjustments for new layout */
+.project-image {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .project-media {
+        gap: 40px;
+    }
+    
+    .mobile-screenshot-img {
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-screenshot-img {
+        max-width: 200px;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Spotlight Effect -->
+    <div class="spotlight"></div>
+
+    <!-- Section Backgrounds -->
+    <div class="section-bg active" id="home-bg"></div>
+    <div class="section-bg" id="project-bg"></div>
+    <div class="section-bg" id="team-bg"></div>
+    <div class="section-bg" id="tech-bg"></div>
+    <div class="section-bg" id="sponsor-bg"></div>
+
+    <!-- Splash Screen -->
+    <div id="splash" class="splash-screen">
+        <div class="splash-content">
+            <div class="logo-container">
+
+
+                <img src="images/team-logo.png" alt="Code Connoisseurs Logo" style="height: 100px;">
+            </div>
+
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+
+
+                <img src="images/team-logo.png" alt="Code Connoisseurs" style="height: 55px;">
+                <!-- height was 70px -->
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#project" class="nav-link">Project</a></li>
+                <li class="nav-item"><a href="#team" class="nav-link">Team</a></li>
+                <li class="nav-item"><a href="#tech" class="nav-link">Tech Stack</a></li>
+                <li class="nav-item"><a href="#sponsor" class="nav-link">Sponsor</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top">
+        <i>↑</i>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section home-section">
+            <div class="container">
+                <div class="home-content">
+                    <h1 class="home-title scroll-animate">Automated Workforce Management Solution</h1>
+                    <p class="home-description scroll-animate">Code Connoisseurs delivers an automated workforce management platform
+                        for Azania Night Lounge, featuring intelligent shift scheduling, secure QR-based attendance
+                        tracking, real-time leave management, and automated payroll integration. Our system eliminates
+                        manual errors, prevents scheduling conflicts, and provides data-driven insights to optimize
+                        staff allocation and enhance operational efficiency in dynamic environments.</p>
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary scroll-animate" id="learnMoreBtn">Learn More</button>
+                        <button class="btn btn-secondary scroll-animate" id="viewDemoBtn">View Demo</button>
+                    </div>
+                </div>
+                <div class="scroll-indicator">
+                    <div class="scroll-arrow"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Section -->
+        <section id="project" class="section project-section">
+            <div class="container">
+                <h2 class="section-title scroll-animate">The Project</h2>
+                <div class="project-content">
+    <div class="project-media">
+        <div class="project-video-container">
+            <div class="project-image">
+                <video autoplay muted loop playsinline class="project-video">
+                    <source src="images/project-demo.mp4" type="video/mp4">
+                    <source src="images/project-demo.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="project-screenshot-container">
+            <div class="mobile-screenshot">
+                <img src="images/mobile-app-screenshot.png" alt="Azania Night Lounge Mobile App" class="mobile-screenshot-img">
+                <div class="screenshot-caption">Mobile App - Employee View</div>
+            </div>
+        </div>
+    </div>
+    <div class="project-details">
+        <h3>Automated Shift Scheduling & Attendance Tracker</h3>
+        <p>Developed for Azania Night Lounge, our system automates workforce management by eliminating paper-based processes, manual scheduling conflicts, and attendance tracking errors. The solution provides real-time insights and automated shift allocation based on employee availability, roles, and business needs.</p>
+        <div class="project-features">
+            <div class="feature-card scroll-animate">
+                <h4>QR Code Attendance</h4>
+                <p>Secure clock-in/out system with location verification to prevent fraudulent clock-ins</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <h4>Automated Scheduling</h4>
+                <p>Intelligent shift allocation considering availability, leave, and role requirements</p>
+            </div>
+            <div class="feature-card scroll-animate">
+                <h4>Leave & Shift Management</h4>
+                <p>Streamlined leave approvals and shift swaps with automated standby allocation</p>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </section>
+
+        <!-- Team Section with Contact Icons -->
+        <section id="team" class="section team-section">
+            <div class="container">
+                <h2 class="section-title scroll-animate">Our Team - 41</h2>
+                <div class="team-members">
+                    <div class="member-card scroll-animate">
+                        <div class="member-image">
+                            <img src="images/student1.jpg" alt="Yatin Fakir">
+                        </div>
+                        <h3 class="member-name">Yatin Fakir</h3>
+                        <p class="member-role">Full Stack Developer - Web</p>
+                        <p class="member-bio">Bridges frontend and backend development with a strong focus on system
+                            integration logic, UI & UX</p>
+                        <div class="member-contact">
+                            <a href="mailto:yatin.fakir@example.com" class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/yatinfakir" target="_blank" class="contact-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-card scroll-animate">
+                        <div class="member-image">
+                            <img src="images/student2.jpg" alt="Cletus Moyo">
+                        </div>
+                        <h3 class="member-name">Cletus Moyo</h3>
+                        <p class="member-role">Full Stack Developer - Mobile</p>
+                        <p class="member-bio">Specialized in end-to-end mobile development, from backend logic to
+                            user-centric frontends.</p>
+                        <div class="member-contact">
+                            <a href="mailto:cletus.moyo@example.com" class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/cletusmoyo" target="_blank" class="contact-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-card scroll-animate">
+                        <div class="member-image">
+                            <img src="images/student3.jpg" alt="Shayzaad Kallan">
+                        </div>
+                        <h3 class="member-name">Shayzaad Kallan</h3>
+                        <p class="member-role">Full Stack Developer - Web</p>
+                        <p class="member-bio">Proficient in full stack web applications, building solutions for complex
+                            business rules.</p>
+                        <div class="member-contact">
+                            <a href="mailto:shayzaad.kallan@example.com" class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/shayzaadkallan" target="_blank" class="contact-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="member-card scroll-animate">
+                        <div class="member-image">
+                            <img src="images/student4.jpg" alt="Katlego Mmadi">
+                        </div>
+                        <h3 class="member-name">Katlego Mmadi</h3>
+                        <p class="member-role">Full Stack Developer - Web</p>
+                        <p class="member-bio">Experienced in building responsive front-end interfaces and robust
+                            back-end systems.</p>
+                        <div class="member-contact">
+                            <a href="mailto:katlego.mmadi@example.com" class="contact-icon email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/katlegommadi" target="_blank" class="contact-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section id="tech" class="section tech-section">
+            <div class="container">
+                <h2 class="section-title scroll-animate">Technology Stack</h2>
+                <div class="tech-grid">
+
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/node.svg" alt="JavaScript">
+                        </div>
+                        <span class="tech-name">JavaScript</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/docker.svg" alt="Docker">
+                        </div>
+                        <span class="tech-name">Docker</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/html.svg" alt="HTML5">
+                        </div>
+                        <span class="tech-name">HTML5</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/css.svg" alt="CSS3">
+                        </div>
+                        <span class="tech-name">CSS3</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/react.svg" alt="React Native">
+                        </div>
+                        <span class="tech-name">React Native</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/mysql.svg" alt="MySQL">
+                        </div>
+                        <span class="tech-name">MySQL</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/figma.svg" alt="Figma">
+                        </div>
+                        <span class="tech-name">Figma</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/vue.svg" alt="Vue JS">
+                        </div>
+                        <span class="tech-name">Vue JS</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/expo.svg" alt="Expo Go">
+                        </div>
+                        <span class="tech-name">Expo Go</span>
+                    </div>
+                    <div class="tech-item scroll-animate">
+                        <div class="tech-icon">
+                            <img src="assets/tech-icons/nodejs.svg" alt="Node JS">
+                        </div>
+                        <span class="tech-name">Node JS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sponsor Section -->
+        <section id="sponsor" class="section sponsor-section">
+            <div class="container">
+                <h2 class="section-title scroll-animate">Our Sponsor</h2>
+                <div class="sponsor-content">
+                    <div class="sponsor-logo scroll-animate">
+                        <img src="images/sponsor-logo.png" alt="Sponsor Logo" style="max-width: 300px; height: auto;">
+                    </div>
+                    <div class="sponsor-details scroll-animate">
+                        <h3>Azania Night Lounge</h3>
+                        <p>We extend our gratitude to Azania Night Lounge for their sponsorship and domain expertise
+                            throughout this project. Established in December 2024 in Bryanston, Johannesburg, Azania
+                            employs 32 staff members including bartenders, security, DJs, waiters, and sparkler girls.
+                            Their real-world operational challenges directly informed the development of our automated
+                            workforce management solution.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+
+
+                    <img src="images/team-logo.png" alt="Code Connoisseurs Logo" style="height: 50px;">
+                </div>
+                <p class="footer-text">A Computer Science Capstone Project - Team 41 - University of Johannesburg</p>
+                <p class="footer-copyright">&copy; 2025 Code Connoisseurs. All rights reserved. Website Designed by
+                    Yatin Fakir</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Main JavaScript for interactive features and animations
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize scroll animations after splash screen
+            setTimeout(() => {
+                initScrollAnimations();
+                
+                // Animate home section elements after splash
+                const homeElements = document.querySelectorAll('#home .scroll-animate');
+                homeElements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 200);
+                });
+            }, 2000);
+
+            // Custom cursor
+            const cursor = document.querySelector('.cursor');
+            const cursorFollower = document.querySelector('.cursor-follower');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+
+                setTimeout(() => {
+                    cursorFollower.style.left = e.clientX + 'px';
+                    cursorFollower.style.top = e.clientY + 'px';
+                }, 100);
+            });
+
+            // Spotlight effect
+            const spotlight = document.querySelector('.spotlight');
+
+            document.addEventListener('mousemove', (e) => {
+                spotlight.style.left = e.clientX - 100 + 'px';
+                spotlight.style.top = e.clientY - 100 + 'px';
+                spotlight.style.opacity = '1';
+            });
+
+            document.addEventListener('mouseleave', () => {
+                spotlight.style.opacity = '0';
+            });
+
+            // Create unique backgrounds for each section
+            createHomeBackground();
+            createProjectBackground();
+            createTeamBackground();
+            createTechBackground();
+            createSponsorBackground();
+
+            function createHomeBackground() {
+                const homeBg = document.getElementById('home-bg');
+
+                // Create floating particles
+                for (let i = 0; i < 25; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+
+                    // Random size
+                    const size = Math.random() * 80 + 20;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+
+                    // Random position
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = Math.random() * 100 + 'vh';
+
+                    // Random animation duration
+                    const duration = (Math.random() * 5 + 5);
+                    particle.style.animationDuration = duration + 's';
+
+                    // Random animation delay
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+
+                    homeBg.appendChild(particle);
+                }
+            }
+
+            function createProjectBackground() {
+                const projectBg = document.getElementById('project-bg');
+
+                // Create glass morphism elements
+                for (let i = 0; i < 15; i++) {
+                    const glass = document.createElement('div');
+                    glass.classList.add('glass-element');
+
+                    // Random size
+                    const width = Math.random() * 200 + 50;
+                    const height = Math.random() * 150 + 30;
+                    glass.style.width = width + 'px';
+                    glass.style.height = height + 'px';
+
+                    // Random position
+                    glass.style.left = Math.random() * 100 + 'vw';
+                    glass.style.top = Math.random() * 100 + 'vh';
+
+                    // Random animation duration
+                    const duration = (Math.random() * 10 + 10);
+                    glass.style.animationDuration = duration + 's';
+
+                    // Random animation delay
+                    glass.style.animationDelay = Math.random() * 5 + 's';
+
+                    projectBg.appendChild(glass);
+                }
+            }
+
+            function createTeamBackground() {
+                const teamBg = document.getElementById('team-bg');
+                const nodes = [];
+
+                // Create plexus nodes
+                for (let i = 0; i < 30; i++) {
+                    const node = document.createElement('div');
+                    node.classList.add('plexus-node');
+
+                    // Random position
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    node.style.left = x + 'vw';
+                    node.style.top = y + 'vh';
+
+                    nodes.push({ x, y, element: node });
+                    teamBg.appendChild(node);
+                }
+
+                // Create connections between nearby nodes
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const node1 = nodes[i];
+                        const node2 = nodes[j];
+
+                        // Calculate distance
+                        const dx = node2.x - node1.x;
+                        const dy = node2.y - node1.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        // Only connect nodes that are close
+                        if (distance < 30) {
+                            const connection = document.createElement('div');
+                            connection.classList.add('plexus-connection');
+
+                            // Position and rotate
+                            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                            connection.style.left = node1.x + 'vw';
+                            connection.style.top = node1.y + 'vh';
+                            connection.style.width = distance + 'vw';
+                            connection.style.transform = `rotate(${angle}deg)`;
+
+                            teamBg.appendChild(connection);
+                        }
+                    }
+                }
+            }
+
+            function createTechBackground() {
+                const techBg = document.getElementById('tech-bg');
+
+                // Create binary rain
+                for (let i = 0; i < 50; i++) {
+                    const binary = document.createElement('div');
+                    binary.classList.add('binary-digit');
+                    binary.textContent = Math.random() > 0.5 ? '1' : '0';
+
+                    // Random position
+                    binary.style.left = Math.random() * 100 + 'vw';
+
+                    // Random animation duration
+                    const duration = (Math.random() * 5 + 5);
+                    binary.style.animationDuration = duration + 's';
+
+                    // Random animation delay
+                    binary.style.animationDelay = Math.random() * 10 + 's';
+
+                    techBg.appendChild(binary);
+                }
+            }
+
+            function createSponsorBackground() {
+                const sponsorBg = document.getElementById('sponsor-bg');
+
+                // Create rotating geometric pattern
+                for (let i = 0; i < 25; i++) {
+                    const shape = document.createElement('div');
+                    shape.style.position = 'absolute';
+
+                    // Random geometric properties
+                    const size = Math.random() * 80 + 30;
+                    const isCircle = Math.random() > 0.7;
+                    const hue = 260 + Math.random() * 40; // Purple-blue range
+
+                    shape.style.width = size + 'px';
+                    shape.style.height = size + 'px';
+                    shape.style.background = `linear-gradient(135deg, 
+            hsla(${hue}, 80%, 60%, 0.08), 
+            hsla(${hue + 40}, 70%, 50%, 0.05))`;
+                    shape.style.border = `1px solid hsla(${hue}, 60%, 60%, 0.1)`;
+
+                    if (isCircle) {
+                        shape.style.borderRadius = '50%';
+                    } else {
+                        shape.style.borderRadius = '8px';
+                        shape.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    }
+
+                    shape.style.left = Math.random() * 100 + 'vw';
+                    shape.style.top = Math.random() * 100 + 'vh';
+                    shape.style.animation = `float ${Math.random() * 25 + 15}s ease-in-out infinite`;
+                    shape.style.animationDelay = Math.random() * 10 + 's';
+                    shape.style.filter = 'blur(0.5px)';
+
+                    sponsorBg.appendChild(shape);
+                }
+
+                // Add connecting lines for network effect
+                for (let i = 0; i < 15; i++) {
+                    const line = document.createElement('div');
+                    line.style.position = 'absolute';
+                    line.style.height = '1px';
+                    line.style.width = Math.random() * 200 + 100 + 'px';
+                    line.style.background = `linear-gradient(90deg, 
+            transparent, 
+            hsla(270, 70%, 60%, 0.05), 
+            transparent)`;
+                    line.style.left = Math.random() * 100 + 'vw';
+                    line.style.top = Math.random() * 100 + 'vh';
+                    line.style.transform = `rotate(${Math.random() * 180}deg)`;
+                    line.style.animation = `glassFloat ${Math.random() * 20 + 10}s ease-in-out infinite`;
+
+                    sponsorBg.appendChild(line);
+                }
+            }
+
+            // Background transition on scroll
+            const sectionBgs = document.querySelectorAll('.section-bg');
+            const sections = document.querySelectorAll('.section');
+
+            function updateActiveBackground() {
+                let currentSection = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+
+                sectionBgs.forEach(bg => {
+                    bg.classList.remove('active');
+                    if (bg.id === currentSection + '-bg') {
+                        bg.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveBackground);
+            updateActiveBackground(); // Initialize
+
+            // Splash screen handling
+            const splashScreen = document.getElementById('splash');
+
+            // Auto-hide splash screen after 3 seconds
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+
+                // Auto scroll to home section after splash
+                setTimeout(() => {
+                    document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }, 1500);
+
+            // Navigation scroll effect
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+
+                // Update active nav link based on scroll position
+                updateActiveNavLink();
+
+                // Show/hide scroll to top button
+                const scrollToTop = document.querySelector('.scroll-to-top');
+                if (window.scrollY > 500) {
+                    scrollToTop.classList.add('visible');
+                } else {
+                    scrollToTop.classList.remove('visible');
+                }
+            });
+
+            // Update active nav link based on scroll position
+            function updateActiveNavLink() {
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('.nav-link');
+
+                let currentSection = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSection}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Mobile menu toggle
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Scroll to top button
+            const scrollToTopBtn = document.querySelector('.scroll-to-top');
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Button interactions
+            const learnMoreBtn = document.getElementById('learnMoreBtn');
+            const viewDemoBtn = document.getElementById('viewDemoBtn');
+
+            learnMoreBtn.addEventListener('click', () => {
+                document.getElementById('project').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            viewDemoBtn.addEventListener('click', () => {
+                // Open YouTube video in a new tab
+                window.open('https://www.youtube.com/watch?v=9pqQpdAjGls', '_blank');
+            });
+
+            // Email functionality with notification
+            document.querySelectorAll('.contact-icon.email').forEach(icon => {
+                icon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const email = this.getAttribute('href').replace('mailto:', '');
+                    
+                    // Create a temporary input to copy email to clipboard
+                    const tempInput = document.createElement('input');
+                    tempInput.value = email;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    
+                    // Show confirmation message
+                    showNotification(`Email address ${email} copied to clipboard!`);
+                });
+            });
+
+            // Text hover effects
+            document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a').forEach(textElement => {
+                textElement.addEventListener('mouseenter', () => {
+                    textElement.style.transform = 'scale(1.02)';
+                    textElement.style.transition = 'transform 0.3s ease';
+                });
+
+                textElement.addEventListener('mouseleave', () => {
+                    textElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Easter eggs
+            // 1. Konami code
+            let konamiCode = [];
+            const konamiSequence = [
+                'ArrowUp', 'ArrowUp',
+                'ArrowDown', 'ArrowDown',
+                'ArrowLeft', 'ArrowRight',
+                'ArrowLeft', 'ArrowRight',
+                'KeyB', 'KeyA'
+            ];
+
+            document.addEventListener('keydown', (e) => {
+                konamiCode.push(e.code);
+
+                // Keep only the last 10 keys
+                if (konamiCode.length > konamiSequence.length) {
+                    konamiCode.shift();
+                }
+
+                // Check if sequence matches
+                if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                    activateKonamiEgg();
+                    konamiCode = []; // Reset
+                }
+            });
+
+            function activateKonamiEgg() {
+                // Create floating elements
+                for (let i = 0; i < 30; i++) {
+                    createFloatingElement();
+                }
+
+                // Change background color
+                document.body.style.background = 'linear-gradient(135deg, #ff00cc 0%, #333399 100%)';
+
+                // Show message
+                const message = document.createElement('div');
+                message.textContent = '🎉 You found the Konami Code! 🎉';
+                message.style.position = 'fixed';
+                message.style.top = '20px';
+                message.style.left = '50%';
+                message.style.transform = 'translateX(-50%)';
+                message.style.background = 'rgba(0, 0, 0, 0.8)';
+                message.style.color = 'white';
+                message.style.padding = '10px 20px';
+                message.style.borderRadius = '5px';
+                message.style.zIndex = '10000';
+                message.style.fontWeight = 'bold';
+                document.body.appendChild(message);
+
+                // Remove message after 5 seconds
+                setTimeout(() => {
+                    document.body.removeChild(message);
+                }, 5000);
+            }
+
+            function createFloatingElement() {
+                const element = document.createElement('div');
+                element.innerHTML = '✨';
+                element.style.position = 'fixed';
+                element.style.fontSize = '24px';
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.top = '-50px';
+                element.style.zIndex = '1000';
+                element.style.pointerEvents = 'none';
+                element.style.animation = `float ${3 + Math.random() * 5}s linear forwards`;
+                document.body.appendChild(element);
+
+                // Remove after animation
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        document.body.removeChild(element);
+                    }
+                }, 8000);
+            }
+
+            // 2. Click on team logo 5 times
+            let clickCount = 0;
+            let lastClickTime = 0;
+
+            document.querySelectorAll('.nav-logo, .footer-logo').forEach(logo => {
+                logo.addEventListener('click', (e) => {
+                    const currentTime = new Date().getTime();
+
+                    // Reset if too much time between clicks
+                    if (currentTime - lastClickTime > 1000) {
+                        clickCount = 0;
+                    }
+
+                    clickCount++;
+                    lastClickTime = currentTime;
+
+                    if (clickCount >= 5) {
+                        activateLogoEasterEgg();
+                        clickCount = 0;
+                    }
+                });
+            });
+
+            function activateLogoEasterEgg() {
+                // Make all tech icons dance
+                const techIcons = document.querySelectorAll('.tech-icon');
+                techIcons.forEach(icon => {
+                    icon.style.animation = 'float 1s ease-in-out infinite';
+                });
+
+                // Show hidden message
+                const message = document.createElement('div');
+                message.textContent = 'Tech icons are dancing! 💃';
+                message.style.position = 'fixed';
+                message.style.bottom = '20px';
+                message.style.right = '20px';
+                message.style.background = 'rgba(108, 99, 255, 0.9)';
+                message.style.color = 'white';
+                message.style.padding = '10px 20px';
+                message.style.borderRadius = '5px';
+                message.style.zIndex = '10000';
+                message.style.fontWeight = 'bold';
+                document.body.appendChild(message);
+
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    document.body.removeChild(message);
+
+                    // Stop dancing
+                    techIcons.forEach(icon => {
+                        icon.style.animation = '';
+                    });
+                }, 3000);
+            }
+
+            // 3. Secret key combination
+            let secretKeys = [];
+            document.addEventListener('keydown', (e) => {
+                secretKeys.push(e.key.toLowerCase());
+
+                // Keep only last 6 keys
+                if (secretKeys.length > 6) {
+                    secretKeys.shift();
+                }
+
+                // Check for "secret" sequence
+                if (secretKeys.join('') === 'secret') {
+                    activateSecretEgg();
+                    secretKeys = [];
+                }
+            });
+
+            function activateSecretEgg() {
+                // Add sparkle effect to all section titles
+                const titles = document.querySelectorAll('.section-title');
+                titles.forEach(title => {
+                    title.classList.add('gradient-text');
+                });
+
+                // Show notification
+                const notification = document.createElement('div');
+                notification.innerHTML = '🌈 Secret mode activated!';
+                notification.style.position = 'fixed';
+                notification.style.top = '50%';
+                notification.style.left = '50%';
+                notification.style.transform = 'translate(-50%, -50%)';
+                notification.style.background = 'rgba(0, 0, 0, 0.8)';
+                notification.style.color = 'white';
+                notification.style.padding = '20px 40px';
+                notification.style.borderRadius = '10px';
+                notification.style.zIndex = '10000';
+                notification.style.fontSize = '24px';
+                notification.style.fontWeight = 'bold';
+                notification.style.backdropFilter = 'blur(10px)';
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 3000);
+            }
+
+            // 4. Click on copyright text
+            const copyright = document.querySelector('.footer-copyright');
+            if (copyright) {
+                copyright.addEventListener('click', () => {
+                    // Create a fun fact popup
+                    const popup = document.createElement('div');
+                    popup.innerHTML = `
+                        <div style="background: rgba(26, 26, 46, 0.95); padding: 20px; border-radius: 10px; max-width: 300px; text-align: center; border: 1px solid #6c63ff; backdrop-filter: blur(10px);">
+                            <h3 style="margin-bottom: 10px; color: #6c63ff;">Did You Know?</h3>
+                            <p style="margin-bottom: 15px;">This project was developed by 4 computer science students over 12 weeks!</p>
+                            <button id="closePopup" style="background: #6c63ff; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Cool!</button>
+                        </div>
+                    `;
+
+                    popup.style.position = 'fixed';
+                    popup.style.top = '50%';
+                    popup.style.left = '50%';
+                    popup.style.transform = 'translate(-50%, -50%)';
+                    popup.style.zIndex = '10000';
+
+                    document.body.appendChild(popup);
+
+                    document.getElementById('closePopup').addEventListener('click', () => {
+                        document.body.removeChild(popup);
+                    });
+                });
+            }
+
+            // 5. Mouse trail effect (only when holding Shift)
+            let mouseTrailActive = false;
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Shift') {
+                    mouseTrailActive = true;
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                if (e.key === 'Shift') {
+                    mouseTrailActive = false;
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!mouseTrailActive) return;
+
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                trail.style.width = '5px';
+                trail.style.height = '5px';
+                trail.style.background = '#6c63ff';
+                trail.style.borderRadius = '50%';
+                trail.style.pointerEvents = 'none';
+                trail.style.zIndex = '1000';
+                trail.style.opacity = '0.7';
+                document.body.appendChild(trail);
+
+                // Fade out and remove
+                setTimeout(() => {
+                    trail.style.opacity = '0';
+                    trail.style.transition = 'opacity 0.5s ease';
+                }, 100);
+
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        document.body.removeChild(trail);
+                    }
+                }, 600);
+            });
+        });
+
+        // Initialize scroll animations
+        function initScrollAnimations() {
+            const animatedElements = document.querySelectorAll('.scroll-animate');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Show notification function
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
